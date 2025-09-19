@@ -81,8 +81,10 @@ Let's run it as mike. We will see the following.
 
 <img width="667" height="139" alt="image" src="https://github.com/user-attachments/assets/dade25ea-2f17-4894-a4f8-9ef82863e977" />
 
-So there is a file that we can execute and take access to the container. A good command is to find the 4000 permissions that www-data has
+So there is a file that we can execute and take access to the container. A good command is to find the 4000 permissions that www-data has.
+
 <img width="718" height="555" alt="image" src="https://github.com/user-attachments/assets/80515c27-6660-4196-b77d-93ed9c2ce3d5" />
+
 Now we know the location of the executable file that we can run as user mike. The root folder dosen't contain anything good but the interesting thing is the host1
 
 That means that we are not alone in the network and there is at least one other machine here. So we can ping the whole subnet (because the nmap dosen't work) and see who will response. So I first check the IP address and then I ping the /24 subnet with a for loop that pings the hosts.
@@ -115,28 +117,37 @@ Subnet: 172.16.20.0/24
 -> for i in {1..254} ;do (ping -c 1 172.16.20.$i | grep "bytes from" &) ;done
 
 IP ALIVE: 172.16.20.6
-<img width="665" height="67" alt="image" src="https://github.com/user-attachments/assets/9dfc2789-385f-4c41-88c9-8db891ca7167" />
 ```
+
+<img width="665" height="67" alt="image" src="https://github.com/user-attachments/assets/9dfc2789-385f-4c41-88c9-8db891ca7167" />
+
 Perfect, now we have a host and also we can check for the id_rsa file that is located under the /home/mike/.ssh/id_rsa path. The reason that we can see it now is because we are root on host1 as we mention before.
 ```
 cat /home/mike/.ssh/id_rsa
 ```
+
 After save it in a file we can ssh the user mike(note that the permissions of id_rsa must change to 600 -> chmod 600 id_rsa).
+
 ```
 ssh mike@172.16.20.6 -i id_rsa
 ```
+
 <img width="552" height="197" alt="image" src="https://github.com/user-attachments/assets/652e52de-98e0-4574-a2d4-ab04034338a5" />
+
 We are host2 now and we can keep going. After checking around I found a SQL listening port using 
 ```
 netstat -tulpen
 ```
+
 <img width="286" height="31" alt="image" src="https://github.com/user-attachments/assets/a211675a-3934-48ab-8832-0eadf48e9417" />
 
 That means we can access mysql database.
+
 ```
 mysql -u mike -p
 It will ask for a password which is default "password"
 ```
+
 And we are in. Now we will try to find some password. After a bit the cleartext password are located in table users.
 ```
 show databases;
@@ -144,13 +155,16 @@ use accounts;
 show tables;
 select * from users;
 ```
+
 <img width="599" height="712" alt="image" src="https://github.com/user-attachments/assets/368efd06-6c92-447a-a64a-43ee6cd2cef9" />
 
 We have both mike and root password. Let's switch to root user by typing su root.
 If we navigate to /root directory we will see a zip file named mike.zip
+
 <img width="590" height="167" alt="image" src="https://github.com/user-attachments/assets/74d74c2f-8ff0-4899-aa1b-64464c4efb1a" />
 
 If we try to unzip it, it will ask for mike's password and then after put the password we will be able to take the machines flag.
+
 <img width="275" height="140" alt="image" src="https://github.com/user-attachments/assets/fca509bf-70ea-4f43-9f61-97fd185c6eb5" />
 
 

